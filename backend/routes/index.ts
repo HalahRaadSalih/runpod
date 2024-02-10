@@ -27,13 +27,16 @@ const options = {
     }
   };
 
-  router.get("/", (req: Request, res: Response) => {
+  router.post("/", (req: Request, res: Response) => {
+    options.data = { ...options.data, ...req.body };
+    // todo validate input
     axios
     .request(options)
     .then(function (response) {
       res.json({images: response.data.output});
     })
     .catch(function (error) {
+      // todo handle error
       console.error(error);
     });
   });
