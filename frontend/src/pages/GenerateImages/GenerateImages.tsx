@@ -5,6 +5,8 @@ import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useState } from 'react';
 import { RunPodImage } from '../../components/GeneratedImages/GeneratedImages.types';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface ImageGenerationBody {
     input: {
@@ -22,9 +24,21 @@ interface ImageGenerationResponse {
 }
 export const GenerateImages = () => {
     const [images, setImages] = useState<RunPodImage[]>([]);
+
+    const mutation = useMutation({
+        mutationFn: (requestData: ImageGenerationBody) => {
+          return axios.post('http://localhost:3001', requestData)
+        },
+        onSuccess: (data: ImageGenerationResponse) => {
+          setImages([...images, ...data.data.images]);
+        },
+        onError: (error) => {
+          console.error('Error:', error);
+        }
+      })
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // todo validate input
         const formData = new FormData(event.currentTarget);
         const body: ImageGenerationBody = {
             input: {
@@ -36,24 +50,8 @@ export const GenerateImages = () => {
             }
             
         };
-        // todo add loading state
-        fetch('http://localhost:3001', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(body),
-        })
-        .then((response) => response.json())
-        .then((data: ImageGenerationResponse) => {
-            // todo handle success
-            // store images locally + prompts
-            setImages([...images, ...data.images]);
-        })
-        .catch((error) => {
-            // todo handle error
-            console.error('Error:', error);
-        });
+        mutation.mutate(body);
+
     };
     return (
         <Box sx={{ 
@@ -100,9 +98,12 @@ export const GenerateImages = () => {
                         <Grid item xs={12} sx={{ justifyContent: 'flex-end'}}>
                             <Button type="submit" variant='contained'>Generate Images</Button>             
                         </Grid>
+                        {mutation.isPending && <div>Loading</div>}
+                        {mutation.isSuccess &&
                         <Grid item xs={12}>
                             <GeneratedImages images={images} />
                         </Grid>
+                        }
                     </Grid>
                 </Box>
             </Stack>
