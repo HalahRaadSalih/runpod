@@ -1,19 +1,14 @@
 import { CircularProgress, Grid } from "@mui/material";
-import PhotoAlbum, { Photo } from "react-photo-album";
-
-export interface RunPodImageForGallery extends Photo {
-    width: number;
-    height: number;
-    prompt: string;
-}
-
-export interface ImageGalleryProps {
-    images: RunPodImageForGallery[];
-    loading: boolean;
-}
+import { useState } from "react";
+import PhotoAlbum from "react-photo-album";
+import Lightbox from "yet-another-react-lightbox";
+import Captions  from "yet-another-react-lightbox/plugins/captions";
+import "yet-another-react-lightbox/styles.css";
+import { ImageGalleryProps } from "./ImageGallery.types";
 
 export const ImageGallery = (props: ImageGalleryProps) => {
     const { images, loading } = props;
+    const [index, setIndex] = useState(-1);
     if(loading){
         return(
         <Grid item xs={12} sx={{
@@ -26,6 +21,15 @@ export const ImageGallery = (props: ImageGalleryProps) => {
     }
 
     return(
-        <PhotoAlbum photos={images} layout="rows" targetRowHeight={150}/>
+        <>
+            <PhotoAlbum photos={images} layout="rows" onClick={({index}) => setIndex(index)}/>
+            <Lightbox
+                slides={images}
+                open={index >= 0}
+                index={index}
+                close={() => setIndex(-1)}
+                plugins={[Captions]}
+            />
+        </>
     );
 };

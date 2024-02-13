@@ -48,7 +48,7 @@ export const convertRunPodGeneratedImagesToGalleryImages= (images: RunPodGenerat
                 src: image.image,
                 width: imageSet.width || DEFAULT_IMAGE_SIZE,
                 height: imageSet.height || DEFAULT_IMAGE_SIZE,
-                prompt: imageSet.prompt
+                title: imageSet.prompt
             })
         });
     });
