@@ -3,10 +3,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { GeneratedImages } from '../../components/GeneratedImages';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RunPodImage, RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+import { db } from '../../models/db';
+import { useLiveQuery } from 'dexie-react-hooks';
 
 interface ImageGenerationBody {
     input: {
@@ -32,9 +34,9 @@ const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string)
 };
 
 export const GenerateImages = () => {
-    const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
     const [prompt, setPrompt] = useState<string>('');
-
+    const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
+    const generatedImages = useLiveQuery(() => db.generatedImages.reverse().sortBy('id'));
     const mutation = useMutation({
         mutationFn: (requestData: ImageGenerationBody) => {
           return axios.post('http://localhost:3001', requestData)
@@ -43,12 +45,18 @@ export const GenerateImages = () => {
             const newImages = convertResponseToGeneratedImages(data.data.images, prompt);
             images.unshift(newImages)
             setImages(images);
+            try {
+                db.generatedImages.add(newImages);
+            }
+            catch (error) {
+                console.error('Error:', error);
+            }
         },
         onError: (error) => {
             // todo handle error
           console.error('Error:', error);
         }
-      })
+      });
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -67,8 +75,14 @@ export const GenerateImages = () => {
 
         // validate form data
         mutation.mutate(body);
-
     };
+
+    useEffect(() => {
+        if (generatedImages) {
+            setImages(generatedImages);
+        }
+    }, [generatedImages]);
+
     return (
         <Box sx={{ 
             display: 'flex', 

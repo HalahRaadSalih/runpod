@@ -5,6 +5,7 @@ export type RunPodImage = {
 
 
 export type RunPodGeneratedImages = {
+    id?: number;
     images: RunPodImage[];
     prompt: string;
 }  
