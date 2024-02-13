@@ -1,11 +1,13 @@
+import { Photo } from "react-photo-album";
+
 export const IMAGE_LIST_ITEM_PX = 234;
 
-export type RunPodImage = {
+export interface RunPodImage extends Photo {
     image: string;
     seed: string;
-    width?: number;
-    height?: number;
-    prompt?: string;
+    width: number;
+    height: number;
+    prompt: string;
   }
 
 
