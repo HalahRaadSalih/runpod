@@ -117,7 +117,7 @@ export const GenerateImages = () => {
                     </Grid>
                 </Box>
                 <Box>
-                    <Grid container  direction={'row'} xs={12}>
+                    <Grid container spacing={4}>
                         <GeneratedImages images={images} loading={mutation.isPending}/>
                     </Grid>
                 </Box>
