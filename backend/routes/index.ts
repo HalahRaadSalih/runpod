@@ -1,46 +1,14 @@
 import express, { Request, Response } from "express";
-import axios from "axios";
 import dotenv from "dotenv";
+import { images_create, images_create_validator } from "../controllers/Image";
 
 dotenv.config();
 
+
 const router = express.Router();
-const options = {
-    method: 'POST',
-    url: 'https://api.runpod.ai/v2/stable-diffusion-v1/runsync',
-    headers: {
-      accept: 'application/json',
-      'content-type': 'application/json',
-      authorization: process.env.RUNPOD_API_KEY
-    },
-    data: {
-      input: {
-        prompt: 'building 8 stories',
-        width: 512,
-        height: 512,
-        guidance_scale: 7.5,
-        num_inference_steps: 50,
-        num_outputs: 2,
-        prompt_strength: 1,
-        scheduler: 'KLMS'
-      }
-    }
-  };
-
-  router.post("/", (req: Request, res: Response) => {
-    options.data = { ...options.data, ...req.body };
-    // todo validate input
-    axios
-    .request(options)
-    .then(function (response) {
-      res.json({images: response.data.output});
-    })
-    .catch(function (error) {
-      // todo handle error
-      console.error(error);
-    });
-  });
-
+  router.post("/", images_create_validator, images_create);
   export { 
     router
   }
+
+
