@@ -1,28 +1,24 @@
-import { ImageList, ImageListItem } from "@mui/material";
-import { RunPodImage, RunPodImageProps } from "./GeneratedImages.types";
+import { CircularProgress, Typography } from "@mui/material";
+import { RunPodGeneratedImages, RunPodImageProps } from "./GeneratedImages.types";
+import { GeneratedImage } from "./GeneratedImage";
 
 export const GeneratedImages = (props :RunPodImageProps) => {
-    // todo: add loading state
-    // todo: add error state
-    // todo: add empty state
-    // todo: use a different image library
     // todo when hoevring over image, show a larger version + show prompt text
-    const { images } = props;
-    if (!images || images.length === 0) {
-        return null;
-    } 
+    const { images, loading } = props;
+    if (loading) {
+        return <CircularProgress />;
+    }
+
+    if (!images) {
+        return <Typography variant="body1">There are no generated images</Typography>;
+    }
     return (
-        <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-            {images.map((item: RunPodImage) => (
-                <ImageListItem key={item.image}>
-                    <img
-                    srcSet={`${item.image}`}
-                    src={`${item.image}`}
-                    alt={item.seed}
-                    loading="lazy"
-                    />
-                </ImageListItem>
-            ))}
-        </ImageList>
+        <>
+        {
+            images.map((item: RunPodGeneratedImages) => (
+                <GeneratedImage key={item.prompt} images={item.images} prompt={item.prompt} />
+            ))
+        }
+        </>
     );
     };

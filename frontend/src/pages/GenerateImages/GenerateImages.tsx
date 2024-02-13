@@ -4,7 +4,7 @@ import { GeneratedImages } from '../../components/GeneratedImages';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useState } from 'react';
-import { RunPodImage } from '../../components/GeneratedImages/GeneratedImages.types';
+import { RunPodImage, RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -19,20 +19,33 @@ interface ImageGenerationBody {
 }
 
 interface ImageGenerationResponse {
-    images: RunPodImage[];
-
+    data: {
+        images: RunPodImage[];
+    }
 }
+
+const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string): RunPodGeneratedImages => {
+    return {
+        images: images,
+        prompt: prompt
+    }
+};
+
 export const GenerateImages = () => {
-    const [images, setImages] = useState<RunPodImage[]>([]);
+    const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
+    const [prompt, setPrompt] = useState<string>('');
 
     const mutation = useMutation({
         mutationFn: (requestData: ImageGenerationBody) => {
           return axios.post('http://localhost:3001', requestData)
         },
         onSuccess: (data: ImageGenerationResponse) => {
-          setImages([...images, ...data.data.images]);
+            const newImages = convertResponseToGeneratedImages(data.data.images, prompt);
+            images.unshift(newImages)
+            setImages(images);
         },
         onError: (error) => {
+            // todo handle error
           console.error('Error:', error);
         }
       })
@@ -40,6 +53,7 @@ export const GenerateImages = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
+        setPrompt(formData.get('prompt') as string);
         const body: ImageGenerationBody = {
             input: {
                 width: Number(formData.get('width')),
@@ -50,6 +64,8 @@ export const GenerateImages = () => {
             }
             
         };
+
+        // validate form data
         mutation.mutate(body);
 
     };
@@ -83,7 +99,7 @@ export const GenerateImages = () => {
                 padding={2}
                 >
                 <Box component={'form'} onSubmit={handleSubmit}>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={4}>
                         <Grid item md={7}>
                             <TextareaPrompt name='prompt' placeholder='Please enter your prompt here' required/>
                             <TextareaPrompt name='negative_prompt' placeholder='Please enter your negative prompt here(optional)' />
@@ -98,10 +114,9 @@ export const GenerateImages = () => {
                         <Grid item xs={12} sx={{ justifyContent: 'flex-end'}}>
                             <Button type="submit" variant='contained'>Generate Images</Button>             
                         </Grid>
-                        {mutation.isPending && <div>Loading</div>}
-                        {mutation.isSuccess &&
+                        {mutation.isSuccess &&  
                         <Grid item xs={12}>
-                            <GeneratedImages images={images} />
+                            <GeneratedImages images={images} loading={mutation.isPending}/>
                         </Grid>
                         }
                     </Grid>

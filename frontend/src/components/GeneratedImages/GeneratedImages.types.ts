@@ -2,8 +2,13 @@ export type RunPodImage = {
     image: string;
     seed: string;
   }
-  
-export interface RunPodImageProps {
-images?: RunPodImage[];
 
+
+export type RunPodGeneratedImages = {
+    images: RunPodImage[];
+    prompt: string;
+}  
+export interface RunPodImageProps {
+  images?: RunPodGeneratedImages[];
+  loading?: boolean;
 }
