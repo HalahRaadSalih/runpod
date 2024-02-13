@@ -6,19 +6,45 @@ import {
     AccordionDetails,
     AccordionSummary,
     ImageListItem,
+    ImageListItemBar,
     Stack,
-    Typography
+    Typography,
 } from '@mui/material';
-import { GeneratedImageProps, IMAGE_LIST_ITEM_PX } from './GeneratedImages.types';
+import { GeneratedImageProps, IMAGE_LIST_ITEM_PX, ImageListItemWithHoverProps } from './GeneratedImages.types';
 import { useState } from 'react';
 import Captions from 'yet-another-react-lightbox/plugins/captions';
 import Lightbox from 'yet-another-react-lightbox';
 import { convertRunPodGeneratedImagesToGalleryImages } from './GeneratedImage.utils';
 
+const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
+    const { item, prompt, onClick } = props;
+    const [displayPromot, setDisplayPrompt] = useState(false);
+
+    return (
+        <ImageListItem
+            key={item.image}
+            onClick={() => onClick()}
+            sx={{
+                width: item.width || IMAGE_LIST_ITEM_PX,
+                height: item.height || IMAGE_LIST_ITEM_PX,
+                objectFit: 'cover',
+                aspectRatio: '1/1'
+            }}
+        >
+            <img src={item.image}
+                alt={item.seed}
+                loading="lazy"
+                onMouseEnter={()=> setDisplayPrompt(true)}
+                onMouseLeave={()=> setDisplayPrompt(false)}
+                />
+            { displayPromot && <ImageListItemBar title={prompt}/> }
+        </ImageListItem>
+    )
+}
 
 export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
     const { item } = props;
-    const { images, prompt, width, height } = item;
+    const { images, prompt} = item;
     const [index, setIndex] = useState(-1);
     const galleryImages = convertRunPodGeneratedImagesToGalleryImages(images);
 
@@ -49,20 +75,7 @@ export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
                 <AccordionDetails sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                     {images.length ? (
                         images.map((item, index) => (
-                            <ImageListItem
-                                key={item.image}
-                                onClick={() => {
-                                    setIndex(index);
-                                }}
-                                sx={{
-                                    width: width || IMAGE_LIST_ITEM_PX,
-                                    height: height || IMAGE_LIST_ITEM_PX,
-                                    objectFit: 'cover',
-                                    aspectRatio: '1/1'
-                                }}
-                            >
-                                <img src={item.image} alt={item.seed} loading="lazy" />
-                            </ImageListItem>
+                            <ImageListItemWithHover item={item} prompt={prompt} onClick={() =>setIndex(index)} key={item.image}/>
                         ))
                     ) : (
                         <Typography variant="body1">No available Images</Typography>
