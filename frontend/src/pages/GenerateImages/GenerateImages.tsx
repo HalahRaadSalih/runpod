@@ -4,16 +4,13 @@ import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useEffect, useState } from 'react';
 import { RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
-import { db } from '../../models/db';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { ImageGenerationBody, ImageGenerationResponse } from './GeneratedImages.types';
-import { convertResponseToGeneratedImages, convertRunPodGeneratedImagesToGalleryImages, validateImageGenerationBody } from './GeneratedImages.utils';
+import { ImageGenerationBody } from './GeneratedImages.types';
+import {convertRunPodGeneratedImagesToGalleryImages, validateImageGenerationBody } from './GeneratedImages.utils';
 import { enqueueSnackbar } from 'notistack';
 import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider/ImageSizeSlider';
 import { GeneratedImages } from '../../components/GeneratedImages';
 import { ImageGallery } from '../../components/ImageGallery';
+import { useGeneratedImages } from '../../hooks/GeneratedImagesHook';
 
 
 export const GenerateImages = () => {
@@ -21,26 +18,16 @@ export const GenerateImages = () => {
     const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
     const [dimentions, setDimentions] = useState({width: DEFAULT_IMAGE_SIZE, height: DEFAULT_IMAGE_SIZE});
     const [groupByPrompt, setGroupByPrompt] = useState<boolean>(true);
-    const generatedImages = useLiveQuery(() => db.generatedImages.reverse().sortBy('id'));
-    const mutation = useMutation({
-        mutationFn: (requestData: ImageGenerationBody) => {
-          return axios.post('http://localhost:3001', requestData)
-        },
-        onSuccess: (data: ImageGenerationResponse) => {
-            const newImages = convertResponseToGeneratedImages(data.data.images, prompt, dimentions.width, dimentions.height);
-            images.unshift(newImages)
-            setImages(images);
-            try {
-                db.generatedImages.add(newImages);
-            }
-            catch (error) {
-                console.error('Error:', error);
-            }
-        },
+    const {generatedImages, isPending, fetchGeneratedImages} = useGeneratedImages({
+        prompt,
+        dimentions,
         onError: (error) => {
             enqueueSnackbar(error.message, { variant: 'error', persist: false, autoHideDuration: 1000});
+        },
+        onSucces: (data) => {
+            setImages([data, ...images]);
         }
-      });
+    })
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -61,7 +48,7 @@ export const GenerateImages = () => {
         };
         const {error, message } = validateImageGenerationBody(body);
         if(!error){
-            mutation.mutate(body);
+            fetchGeneratedImages(body);
         }
         else {
             enqueueSnackbar(message, { variant: 'error', persist: false, autoHideDuration: 1000});
@@ -135,13 +122,13 @@ export const GenerateImages = () => {
                 { groupByPrompt &&
                     <Box>
                         <Grid container spacing={4}>
-                            <GeneratedImages images={images} loading={mutation.isPending}/>
+                            <GeneratedImages images={images} loading={isPending}/>
                         </Grid>
                     </Box>
                 }
                 { !groupByPrompt &&
                     <Box>
-                        <ImageGallery images={convertRunPodGeneratedImagesToGalleryImages(images)} loading={mutation.isPending}/>
+                        <ImageGallery images={convertRunPodGeneratedImagesToGalleryImages(images)} loading={isPending}/>
                     </Box>
                 }
             </Stack>
