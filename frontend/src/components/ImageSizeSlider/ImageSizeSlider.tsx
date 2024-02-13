@@ -3,6 +3,7 @@ import { Slider, Typography } from "@mui/material";
 const DEFAULT_SIZE = 512;
 const MIN_SIZE = 128;
 const MAX_SIZE = 768;
+export const IMAGE_SIZE_VALUES = [128, 256, 384, 448, DEFAULT_SIZE, 640, 768];
 
 const marks = [
     {
@@ -46,7 +47,6 @@ interface ImageSizeSliderProps {
 }
 
 export const ImageSizeSlider = (props: ImageSizeSliderProps) => {
-    // todo: fix slider labels size
     const { label, name } = props;
     return(
             <>

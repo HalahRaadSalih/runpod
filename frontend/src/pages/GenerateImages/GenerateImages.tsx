@@ -4,34 +4,15 @@ import { GeneratedImages } from '../../components/GeneratedImages';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useEffect, useState } from 'react';
-import { RunPodImage, RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
+import { RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { db } from '../../models/db';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { ImageGenerationBody, ImageGenerationResponse } from './GeneratedImages.types';
+import { convertResponseToGeneratedImages, validateImageGenerationBody } from './GeneratedImages.utils';
+import { enqueueSnackbar } from 'notistack';
 
-interface ImageGenerationBody {
-    input: {
-        prompt: string;
-        negative_prompt: string;
-        width: number;
-        height: number;
-        num_outputs: number;
-    }
-}
-
-interface ImageGenerationResponse {
-    data: {
-        images: RunPodImage[];
-    }
-}
-
-const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string): RunPodGeneratedImages => {
-    return {
-        images: images,
-        prompt: prompt
-    }
-};
 
 export const GenerateImages = () => {
     const [prompt, setPrompt] = useState<string>('');
@@ -53,8 +34,7 @@ export const GenerateImages = () => {
             }
         },
         onError: (error) => {
-            // todo handle error
-          console.error('Error:', error);
+            enqueueSnackbar(error.message, { variant: 'error', persist: false, autoHideDuration: 1000});
         }
       });
 
@@ -64,17 +44,20 @@ export const GenerateImages = () => {
         setPrompt(formData.get('prompt') as string);
         const body: ImageGenerationBody = {
             input: {
-                width: Number(formData.get('width')),
+                width: 200,
                 height: Number(formData.get('height')),
                 prompt: formData.get('prompt') as string,
                 negative_prompt: formData.get('negative_prompt') as string,
                 num_outputs: Number(formData.get('num_outputs')),
             }
-            
         };
-
-        // validate form data
-        mutation.mutate(body);
+        const {error, message } = validateImageGenerationBody(body);
+        if(!error){
+            mutation.mutate(body);
+        }
+        else {
+            enqueueSnackbar(message, { variant: 'error', persist: false, autoHideDuration: 1000});
+        }
     };
 
     useEffect(() => {
