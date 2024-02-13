@@ -114,11 +114,11 @@ export const GenerateImages = () => {
                         <Grid item xs={12} sx={{ justifyContent: 'flex-end'}}>
                             <Button type="submit" variant='contained'>Generate Images</Button>             
                         </Grid>
-                        {mutation.isSuccess &&  
-                        <Grid item xs={12}>
-                            <GeneratedImages images={images} loading={mutation.isPending}/>
-                        </Grid>
-                        }
+                    </Grid>
+                </Box>
+                <Box>
+                    <Grid container  direction={'row'} xs={12}>
+                        <GeneratedImages images={images} loading={mutation.isPending}/>
                     </Grid>
                 </Box>
             </Stack>
