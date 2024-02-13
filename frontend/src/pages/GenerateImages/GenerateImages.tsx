@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Grid, IconButton, Stack, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, FormControlLabel, FormGroup, Grid, IconButton, Stack, Switch, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
@@ -9,17 +9,18 @@ import axios from 'axios';
 import { db } from '../../models/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { ImageGenerationBody, ImageGenerationResponse } from './GeneratedImages.types';
-import { convertResponseToGeneratedImages, validateImageGenerationBody } from './GeneratedImages.utils';
+import { convertResponseToGeneratedImages, convertRunPodGeneratedImagesToGalleryImages, validateImageGenerationBody } from './GeneratedImages.utils';
 import { enqueueSnackbar } from 'notistack';
 import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider/ImageSizeSlider';
 import { GeneratedImages } from '../../components/GeneratedImages';
+import { ImageGallery } from '../../components/ImageGallery';
 
 
 export const GenerateImages = () => {
     const [prompt, setPrompt] = useState<string>('');
     const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
     const [dimentions, setDimentions] = useState({width: DEFAULT_IMAGE_SIZE, height: DEFAULT_IMAGE_SIZE});
-
+    const [groupByPrompt, setGroupByPrompt] = useState<boolean>(true);
     const generatedImages = useLiveQuery(() => db.generatedImages.reverse().sortBy('id'));
     const mutation = useMutation({
         mutationFn: (requestData: ImageGenerationBody) => {
@@ -120,11 +121,29 @@ export const GenerateImages = () => {
                         </Grid>
                     </Grid>
                 </Box>
-                <Box>
-                    <Grid container spacing={4}>
-                        <GeneratedImages images={images} loading={mutation.isPending}/>
+                <Grid container spacing={4}>
+                    <Grid item xs={12}>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={<Switch defaultChecked />}
+                            label="Group Images By Prompt"
+                            onChange={() => setGroupByPrompt(!groupByPrompt)}
+                            />
+                    </FormGroup>
                     </Grid>
-                </Box>
+                </Grid >
+                { groupByPrompt &&
+                    <Box>
+                        <Grid container spacing={4}>
+                            <GeneratedImages images={images} loading={mutation.isPending}/>
+                        </Grid>
+                    </Box>
+                }
+                { !groupByPrompt &&
+                    <Box>
+                        <ImageGallery images={convertRunPodGeneratedImagesToGalleryImages(images)} loading={mutation.isPending}/>
+                    </Box>
+                }
             </Stack>
         </Box>
     );
