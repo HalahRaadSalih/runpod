@@ -3,7 +3,6 @@ import { RunPodGeneratedImages, RunPodImageProps } from "./GeneratedImages.types
 import { GeneratedImage } from "./GeneratedImage";
 
 export const GeneratedImages = (props :RunPodImageProps) => {
-    // todo when hoevring over image, show a larger version + show prompt text
     const { images, loading } = props;
     if (loading) {
         return <CircularProgress />;
@@ -15,8 +14,8 @@ export const GeneratedImages = (props :RunPodImageProps) => {
     return (
         <>
         {
-            images.map((item: RunPodGeneratedImages) => (
-                <GeneratedImage key={item.prompt} images={item.images} prompt={item.prompt} />
+            images.map((item: RunPodGeneratedImages, index) => (
+                <GeneratedImage key={index} images={item.images} prompt={item.prompt} />
             ))
         }
         </>
