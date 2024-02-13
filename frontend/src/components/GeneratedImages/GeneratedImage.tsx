@@ -10,6 +10,8 @@ import {
     Typography
 } from '@mui/material';
 import { RunPodImage } from './GeneratedImages.types';
+import { useState } from 'react';
+import { ImageModal } from './ImageModal';
 
 const IMAGE_LIST_ITEM_PX = 234;
 
@@ -20,7 +22,11 @@ interface GeneratedImageProps {
 
 export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
     const { images, prompt } = props;
+    const [open, setOpen] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<RunPodImage | undefined>(undefined);
     return (
+        <>
+            {open && <ImageModal image={selectedImage} open={open} onClose={() => setOpen(false)} prompt={prompt}/>}
             <Accordion defaultExpanded>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <Stack direction="row" gap={2}>
@@ -41,6 +47,9 @@ export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
                         images.map((item) => (
                             <ImageListItem
                                 key={item.image}
+                                onClick={() => {
+                                    setOpen(true);
+                                    setSelectedImage(item)}}
                                 sx={{
                                     width: IMAGE_LIST_ITEM_PX,
                                     height: IMAGE_LIST_ITEM_PX,
@@ -56,6 +65,7 @@ export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
                     )}
                 </AccordionDetails>
             </Accordion>
+            </>
     );
 };
 

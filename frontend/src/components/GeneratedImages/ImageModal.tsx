@@ -3,14 +3,17 @@ import { RunPodImage } from "./GeneratedImages.types";
 import CloseIcon from '@mui/icons-material/Close';
 
 interface ImageModalProps {
-    image: RunPodImage;
+    image?: RunPodImage;
     prompt: string;
     open: boolean;
     onClose: () => void;
 } 
 
-export const ImageModal = (props: ImageModalProps): JSX.Element => {
+export const ImageModal = (props: ImageModalProps): JSX.Element | null => {
     const { image, prompt, open, onClose } = props;
+    if (!image) {
+        return null;
+    }
     return (
         <Dialog open={open} onClose={onClose}>
             <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -38,6 +41,7 @@ export const ImageModal = (props: ImageModalProps): JSX.Element => {
                                     }}>
                         <img src={image.image} alt={image.seed} loading="lazy" />
                     </ImageListItem>
+
                 </Box>
             </DialogContent>
         </Dialog>
