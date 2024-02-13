@@ -28,7 +28,12 @@ const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
                 width: item.width || IMAGE_LIST_ITEM_PX,
                 height: item.height || IMAGE_LIST_ITEM_PX,
                 objectFit: 'cover',
-                aspectRatio: '1/1'
+                aspectRatio: '1/1',
+                borderRadius: 1,
+                '> img':{
+                    borderRadius: 1
+                }
+
             }}
         >
             <img src={item.image}
