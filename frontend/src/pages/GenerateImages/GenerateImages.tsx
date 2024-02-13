@@ -1,6 +1,5 @@
 import { AppBar, Box, Button, Grid, IconButton, Stack, Toolbar, Typography } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { GeneratedImages } from '../../components/GeneratedImages';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useEffect, useState } from 'react';
@@ -12,18 +11,22 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { ImageGenerationBody, ImageGenerationResponse } from './GeneratedImages.types';
 import { convertResponseToGeneratedImages, validateImageGenerationBody } from './GeneratedImages.utils';
 import { enqueueSnackbar } from 'notistack';
+import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider/ImageSizeSlider';
+import { GeneratedImages } from '../../components/GeneratedImages';
 
 
 export const GenerateImages = () => {
     const [prompt, setPrompt] = useState<string>('');
     const [images, setImages] = useState<RunPodGeneratedImages[]>([]);
+    const [dimentions, setDimentions] = useState({width: DEFAULT_IMAGE_SIZE, height: DEFAULT_IMAGE_SIZE});
+
     const generatedImages = useLiveQuery(() => db.generatedImages.reverse().sortBy('id'));
     const mutation = useMutation({
         mutationFn: (requestData: ImageGenerationBody) => {
           return axios.post('http://localhost:3001', requestData)
         },
         onSuccess: (data: ImageGenerationResponse) => {
-            const newImages = convertResponseToGeneratedImages(data.data.images, prompt);
+            const newImages = convertResponseToGeneratedImages(data.data.images, prompt, dimentions.width, dimentions.height);
             images.unshift(newImages)
             setImages(images);
             try {
@@ -41,12 +44,16 @@ export const GenerateImages = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        setPrompt(formData.get('prompt') as string);
+        const promptValue = formData.get('prompt') as string;
+        const width = Number(formData.get('width'));
+        const height = Number(formData.get('height'));
+        setPrompt(promptValue);
+        setDimentions({width, height});
         const body: ImageGenerationBody = {
             input: {
-                width: 200,
-                height: Number(formData.get('height')),
-                prompt: formData.get('prompt') as string,
+                width: width,
+                height: height,
+                prompt: promptValue,
                 negative_prompt: formData.get('negative_prompt') as string,
                 num_outputs: Number(formData.get('num_outputs')),
             }

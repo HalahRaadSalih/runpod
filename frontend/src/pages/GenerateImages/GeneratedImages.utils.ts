@@ -1,13 +1,16 @@
 import { RunPodGeneratedImages, RunPodImage } from "../../components/GeneratedImages";
-import { IMAGE_SIZE_VALUES } from "../../components/ImageSizeSlider/ImageSizeSlider";
+import { RunPodImageForGallery } from "../../components/ImageGallery/ImageGallery";
+import { DEFAULT_IMAGE_SIZE, IMAGE_SIZE_VALUES } from "../../components/ImageSizeSlider/ImageSizeSlider";
 import { ImageGenerationBody, ValidationError } from "./GeneratedImages.types";
 
 
 const NUM_OUTPUTS_RANGE = Array.from({length: 9}, (_, i) => i + 1)
-export const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string): RunPodGeneratedImages => {
+export const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string, width: number, height: number): RunPodGeneratedImages => {
     return {
         images: images,
-        prompt: prompt
+        prompt: prompt,
+        width: width,
+        height: height
     }
 };
 
@@ -35,4 +38,20 @@ export const validateImageGenerationBody = (body: ImageGenerationBody): Validati
     return {
         error: false,
     }
+};
+
+export const convertRunPodGeneratedImagesToGalleryImages= (images: RunPodGeneratedImages[]): RunPodImageForGallery[] => {
+    const convertedImages: RunPodImageForGallery[] = [];
+    images.flatMap((imageSet) => {
+        imageSet.images.forEach((image) => {
+            convertedImages.push( {
+                src: image.image,
+                width: imageSet.width || DEFAULT_IMAGE_SIZE,
+                height: imageSet.height || DEFAULT_IMAGE_SIZE,
+                prompt: imageSet.prompt
+            })
+        });
+    });
+
+    return convertedImages;
 };

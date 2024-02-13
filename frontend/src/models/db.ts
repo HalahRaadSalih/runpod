@@ -8,7 +8,7 @@ export class MyDatabase extends Dexie {
     constructor() {
       super('myDatabase');
       this.version(1).stores({
-        generatedImages: '++id, prompt, *images'
+        generatedImages: '++id, prompt, *images, width, height'
       });
     }
   }

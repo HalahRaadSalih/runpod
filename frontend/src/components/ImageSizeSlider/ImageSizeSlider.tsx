@@ -1,9 +1,9 @@
 import { Slider, Typography } from "@mui/material";
 
-const DEFAULT_SIZE = 512;
+export const DEFAULT_IMAGE_SIZE = 512;
 const MIN_SIZE = 128;
 const MAX_SIZE = 768;
-export const IMAGE_SIZE_VALUES = [128, 256, 384, 448, DEFAULT_SIZE, 640, 768];
+export const IMAGE_SIZE_VALUES = [128, 256, 384, 448, DEFAULT_IMAGE_SIZE, 640, 768];
 
 const marks = [
     {
@@ -23,7 +23,7 @@ const marks = [
       label: '448px',
     },
     {
-        value: DEFAULT_SIZE,
+        value: DEFAULT_IMAGE_SIZE,
         label: '512px',
     },
     {
@@ -56,7 +56,7 @@ export const ImageSizeSlider = (props: ImageSizeSliderProps) => {
                 <Slider
                     name={name}
                     aria-label="Image Size"
-                    defaultValue={DEFAULT_SIZE}
+                    defaultValue={DEFAULT_IMAGE_SIZE}
                     getAriaValueText={valuetext}
                     valueLabelDisplay="auto"
                     marks={marks}

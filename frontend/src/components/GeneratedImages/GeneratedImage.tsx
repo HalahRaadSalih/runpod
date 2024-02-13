@@ -9,19 +9,14 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import { RunPodImage } from './GeneratedImages.types';
+import { GeneratedImageProps, IMAGE_LIST_ITEM_PX, RunPodImage } from './GeneratedImages.types';
 import { useState } from 'react';
 import { ImageModal } from './ImageModal';
 
-const IMAGE_LIST_ITEM_PX = 234;
-
-interface GeneratedImageProps {
-    images: RunPodImage[];
-    prompt: string;
-}
 
 export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
-    const { images, prompt } = props;
+    const { item } = props;
+    const { images, prompt, width, height } = item;
     const [open, setOpen] = useState(false);
     const [selectedImage, setSelectedImage] = useState<RunPodImage | undefined>(undefined);
     return (
@@ -51,8 +46,8 @@ export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
                                     setOpen(true);
                                     setSelectedImage(item)}}
                                 sx={{
-                                    width: IMAGE_LIST_ITEM_PX,
-                                    height: IMAGE_LIST_ITEM_PX,
+                                    width: width || IMAGE_LIST_ITEM_PX,
+                                    height: height || IMAGE_LIST_ITEM_PX,
                                     objectFit: 'cover',
                                     aspectRatio: '1/1'
                                 }}

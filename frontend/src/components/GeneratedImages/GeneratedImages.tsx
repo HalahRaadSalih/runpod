@@ -18,9 +18,7 @@ export const GeneratedImages = (props :RunPodImageProps) => {
     return (
         <Grid item xs={12}>
         {
-            images.map((item: RunPodGeneratedImages, index) => (
-                <GeneratedImage key={index} images={item.images} prompt={item.prompt} />
-            ))
+            images.map((item: RunPodGeneratedImages, index) => (<GeneratedImage key={index} item={item} />))
         }
         </Grid>
     );
