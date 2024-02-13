@@ -7,10 +7,10 @@ const MAX_NUM_OUTPUT = 9;
 export const ImageNumberSizeSlider = () => {
     return (
         <>
-            <Typography gutterBottom>Image Count</Typography>
+            <Typography gutterBottom>Number of generated images</Typography>
             <Slider
                 name="num_outputs"
-                aria-label="Image count"
+                aria-label="Number of generated images"
                 defaultValue={DEFAULT_NUM_OUTPUT}
                 valueLabelDisplay="auto"
                 step={1}
