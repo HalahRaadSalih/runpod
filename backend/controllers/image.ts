@@ -28,6 +28,7 @@ const options = {
 
   const images_create_validator = [
     body('input.prompt').isString().notEmpty().escape(),
+    body('input.negative_prompt').optional().isString().escape(),
     body('input.width').isIn([128, 256, 384, 448, 512, 640, 768]),
     body('input.height').isIn([128, 256, 384, 448, 512, 640, 768]),
     body('input.num_outputs').isIn([1, 2, 3, 4, 5, 6, 7, 8, 9])
