@@ -6,11 +6,18 @@ import { ImageGenerationBody, ValidationError } from "./GeneratedImages.types";
 
 const NUM_OUTPUTS_RANGE = Array.from({length: 9}, (_, i) => i + 1)
 export const convertResponseToGeneratedImages = (images: RunPodImage[], prompt: string, width: number, height: number): RunPodGeneratedImages => {
+    const newImages= images.map((image) => {
+        return {
+            ...image,
+            src: image.image,
+            width: width,
+            height: height,
+            title: prompt,
+        }
+    });
     return {
-        images: images,
-        prompt: prompt,
-        width: width,
-        height: height
+        images: newImages,
+        prompt: prompt
     }
 };
 
