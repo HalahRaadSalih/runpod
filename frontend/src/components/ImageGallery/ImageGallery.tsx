@@ -9,19 +9,20 @@ import { ImageGalleryProps } from "./ImageGallery.types";
 export const ImageGallery = (props: ImageGalleryProps) => {
     const { images, loading } = props;
     const [index, setIndex] = useState(-1);
-    if(loading){
-        return(
-        <Grid item xs={12} sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-        }}>
-            <CircularProgress />
-        </Grid>);
-    }
 
     return(
         <>
+            {loading &&
+            <Grid item xs={12}
+                    sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    paddingBottom: 4
+                }}
+                    >
+                <CircularProgress />
+            </Grid>}
             <PhotoAlbum photos={images} layout="rows" onClick={({index}) => setIndex(index)}/>
             <Lightbox
                 slides={images}
