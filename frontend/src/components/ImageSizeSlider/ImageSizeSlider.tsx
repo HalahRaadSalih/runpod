@@ -1,9 +1,5 @@
 import { Slider, Typography } from "@mui/material";
-
-export const DEFAULT_IMAGE_SIZE = 512;
-const MIN_SIZE = 128;
-const MAX_SIZE = 768;
-export const IMAGE_SIZE_VALUES = [128, 256, 384, 448, DEFAULT_IMAGE_SIZE, 640, 768];
+import { DEFAULT_IMAGE_SIZE, MAX_SIZE, MIN_SIZE } from "./ImageSizeSlider.constants";
 
 const marks = [
     {

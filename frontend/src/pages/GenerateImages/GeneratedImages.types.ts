@@ -1,4 +1,4 @@
-import { RunPodImage } from "../../components/GeneratedImages";
+import { RunPodImage } from "../../components/AccordionImageGallery";
 
 export interface ImageGenerationBody {
     input: {

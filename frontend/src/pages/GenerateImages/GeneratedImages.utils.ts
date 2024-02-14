@@ -1,6 +1,6 @@
-import { RunPodGeneratedImages, RunPodImage } from "../../components/GeneratedImages";
-import { RunPodImageForGallery } from "../../components/ImageGallery/ImageGallery";
-import { DEFAULT_IMAGE_SIZE, IMAGE_SIZE_VALUES } from "../../components/ImageSizeSlider/ImageSizeSlider";
+import { RunPodGeneratedImages, RunPodImage } from "../../components/AccordionImageGallery";
+import { RunPodImageForGallery } from "../../components/ImageGallery";
+import { DEFAULT_IMAGE_SIZE, IMAGE_SIZE_VALUES } from "../../components/ImageSizeSlider";
 import { ImageGenerationBody, ValidationError } from "./GeneratedImages.types";
 
 

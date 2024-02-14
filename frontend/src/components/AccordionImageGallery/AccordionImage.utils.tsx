@@ -1,5 +1,5 @@
+import { RunPodImage } from ".";
 import { RunPodImageForGallery } from "../ImageGallery/ImageGallery.types";
-import { RunPodImage } from "./GeneratedImages.types";
 
 export const convertRunPodGeneratedImagesToGalleryImages= (images: RunPodImage[]): RunPodImageForGallery[] => {
     return images.map((image) => ({

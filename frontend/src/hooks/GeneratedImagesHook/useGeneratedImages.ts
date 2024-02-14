@@ -4,7 +4,7 @@ import { ImageGenerationBody, ImageGenerationResponse } from "../../pages/Genera
 import { db } from "../../models/db";
 import { convertResponseToGeneratedImages } from "../../pages/GenerateImages/GeneratedImages.utils";
 import axios from "axios";
-import { RunPodGeneratedImages } from "../../components/GeneratedImages";
+import { RunPodGeneratedImages } from "../../components/AccordionImageGallery";
 
 interface UseGeneratedImagesProps {
     prompt: string;

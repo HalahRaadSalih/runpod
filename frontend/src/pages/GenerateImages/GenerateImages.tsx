@@ -7,7 +7,7 @@ import { RunPodGeneratedImages } from '../../components/AccordionImageGallery/ty
 import { ImageGenerationBody } from './GeneratedImages.types';
 import {convertRunPodGeneratedImagesToGalleryImages, validateImageGenerationBody } from './GeneratedImages.utils';
 import { enqueueSnackbar } from 'notistack';
-import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider/ImageSizeSlider';
+import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider';
 import { AccordionImageGallery } from '../../components/AccordionImageGallery';
 import { ImageGallery } from '../../components/ImageGallery';
 import { useGeneratedImages } from '../../hooks/GeneratedImagesHook';

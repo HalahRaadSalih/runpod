@@ -1,5 +1,5 @@
 import Dexie, { Table } from "dexie";
-import { RunPodGeneratedImages } from "../components/GeneratedImages";
+import { RunPodGeneratedImages } from "../components/AccordionImageGallery";
 
 
 
