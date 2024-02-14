@@ -5,6 +5,7 @@
   "type": "module",
   "proxy": "http://localhost:3001",
   "scripts": {
+    "test": "vitest",
     "dev": "vite --port=3000 --open",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
@@ -18,6 +19,9 @@
     "@mui/material": "^5.15.9",
     "@tanstack/eslint-plugin-query": "^5.18.1",
     "@tanstack/react-query": "^5.18.1",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
     "axios": "^1.6.7",
     "dexie": "^3.2.5",
     "dexie-react-hooks": "^1.1.7",
@@ -30,6 +34,7 @@
     "yet-another-react-lightbox": "^3.17.0"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.12",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
@@ -38,7 +43,9 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "jsdom": "^24.0.0",
     "typescript": "^5.2.2",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "vitest": "^1.2.2"
   }
 }
