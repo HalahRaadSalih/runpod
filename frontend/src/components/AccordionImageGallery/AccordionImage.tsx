@@ -16,7 +16,7 @@ import Captions from 'yet-another-react-lightbox/plugins/captions';
 import Lightbox from 'yet-another-react-lightbox';
 import { convertRunPodGeneratedImagesToGalleryImages } from './AccordionImage.utils';
 
-const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
+export const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
     const { item, prompt, onClick } = props;
     const [displayPromot, setDisplayPrompt] = useState(false);
 
