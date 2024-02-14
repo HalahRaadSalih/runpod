@@ -1,8 +1,8 @@
 import { CircularProgress, Grid, Typography } from "@mui/material";
-import { RunPodGeneratedImages, RunPodImageProps } from "./GeneratedImages.types";
-import { GeneratedImage } from "./GeneratedImage";
+import { RunPodGeneratedImages, RunPodImageProps } from "./types";
+import { AccordionImage } from "./AccordionImage";
 
-export const GeneratedImages = (props :RunPodImageProps) => {
+export const AccordionImageGallery = (props :RunPodImageProps) => {
     const { images, loading } = props;
     if (loading) {
         return <Grid item xs={12} sx={{
@@ -18,7 +18,7 @@ export const GeneratedImages = (props :RunPodImageProps) => {
     return (
         <Grid item xs={12}>
         {
-            images.map((item: RunPodGeneratedImages, index) => (<GeneratedImage key={index} item={item} />))
+            images.map((item: RunPodGeneratedImages, index) => (<AccordionImage key={index} item={item} />))
         }
         </Grid>
     );

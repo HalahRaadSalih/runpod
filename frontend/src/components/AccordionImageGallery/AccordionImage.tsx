@@ -10,11 +10,11 @@ import {
     Stack,
     Typography,
 } from '@mui/material';
-import { GeneratedImageProps, IMAGE_LIST_ITEM_PX, ImageListItemWithHoverProps } from './GeneratedImages.types';
+import { GeneratedImageProps, IMAGE_LIST_ITEM_PX, ImageListItemWithHoverProps } from './types';
 import { useState } from 'react';
 import Captions from 'yet-another-react-lightbox/plugins/captions';
 import Lightbox from 'yet-another-react-lightbox';
-import { convertRunPodGeneratedImagesToGalleryImages } from './GeneratedImage.utils';
+import { convertRunPodGeneratedImagesToGalleryImages } from './AccordionImage.utils';
 
 const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
     const { item, prompt, onClick } = props;
@@ -47,7 +47,7 @@ const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
     )
 }
 
-export const GeneratedImage = (props: GeneratedImageProps): JSX.Element => {
+export const AccordionImage = (props: GeneratedImageProps): JSX.Element => {
     const { item } = props;
     const { images, prompt} = item;
     const [index, setIndex] = useState(-1);

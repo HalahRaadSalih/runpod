@@ -1,5 +1,5 @@
 import { Dialog, DialogTitle, IconButton, DialogContent, Box, ImageListItem } from "@mui/material";
-import { RunPodImage } from "./GeneratedImages.types";
+import { RunPodImage } from "./types";
 import CloseIcon from '@mui/icons-material/Close';
 
 interface ImageModalProps {

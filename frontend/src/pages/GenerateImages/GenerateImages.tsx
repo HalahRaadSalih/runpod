@@ -3,12 +3,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { TextareaPrompt } from '../../components/TextareaPrompt';
 import { ImageNumberSizeSlider, ImageSizeSlider } from '../../components/ImageSizeSlider';
 import { useEffect, useState } from 'react';
-import { RunPodGeneratedImages } from '../../components/GeneratedImages/GeneratedImages.types';
+import { RunPodGeneratedImages } from '../../components/AccordionImageGallery/types';
 import { ImageGenerationBody } from './GeneratedImages.types';
 import {convertRunPodGeneratedImagesToGalleryImages, validateImageGenerationBody } from './GeneratedImages.utils';
 import { enqueueSnackbar } from 'notistack';
 import { DEFAULT_IMAGE_SIZE } from '../../components/ImageSizeSlider/ImageSizeSlider';
-import { GeneratedImages } from '../../components/GeneratedImages';
+import { AccordionImageGallery } from '../../components/AccordionImageGallery';
 import { ImageGallery } from '../../components/ImageGallery';
 import { useGeneratedImages } from '../../hooks/GeneratedImagesHook';
 
@@ -122,7 +122,7 @@ export const GenerateImages = () => {
                 { groupByPrompt &&
                     <Box>
                         <Grid container spacing={4}>
-                            <GeneratedImages images={images} loading={isPending}/>
+                            <AccordionImageGallery images={images} loading={isPending}/>
                         </Grid>
                     </Box>
                 }
