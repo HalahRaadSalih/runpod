@@ -1,4 +1,4 @@
-import { Slider, Typography } from "@mui/material";
+import { FormControl, FormLabel, Grid, Slider, Typography } from "@mui/material";
 import { DEFAULT_IMAGE_SIZE, MAX_SIZE, MIN_SIZE } from "./ImageSizeSlider.constants";
 
 const marks = [
@@ -45,10 +45,9 @@ interface ImageSizeSliderProps {
 export const ImageSizeSlider = (props: ImageSizeSliderProps) => {
     const { label, name } = props;
     return(
-            <>
-                <Typography gutterBottom>
-                    {label}
-                </Typography>
+            <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <FormLabel>{label}</FormLabel>
                 <Slider
                     name={name}
                     aria-label="Image Size"
@@ -59,7 +58,14 @@ export const ImageSizeSlider = (props: ImageSizeSliderProps) => {
                     step={null}
                     min={MIN_SIZE}
                     max={MAX_SIZE}
+                    sx={{
+                      '& .MuiSlider-markLabel': {
+                        fontSize: 12,
+                        fontWeight: 'normal',
+                      },
+                    }}
                 />
-            </>
+                </FormControl>
+            </Grid>
     );
 };

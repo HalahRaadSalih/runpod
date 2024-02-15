@@ -92,16 +92,19 @@ export const GenerateImages = () => {
                 >
                 <Box component={'form'} onSubmit={handleSubmit}>
                     <Grid container spacing={4}>
-                        <Grid item md={7}>
-                            <TextareaPrompt name='prompt' placeholder='Please enter your prompt here(required)' required/>
-                            <TextareaPrompt name='negative_prompt' placeholder='Please enter your negative prompt here(optional)' />
+                        <Grid container item md={7} rowGap={2}>
+                            <TextareaPrompt name='prompt'
+                                            placeholder='Please enter your prompt here(required)'
+                                            label='Describe your image here'
+                                            required/>
+                            <TextareaPrompt name='negative_prompt'
+                                            placeholder='Please enter your negative prompt here(optional)'
+                                            label='Describe your negative prompt here'/>
                         </Grid>
-                        <Grid item md={4}>
-                            <Box sx={{ width: '450px'}}>
+                        <Grid container item md={4} rowGap={2}>
                             <ImageSizeSlider label='Image Width' name='width'/>
                             <ImageSizeSlider label='Image Height' name='height'/>
                             <ImageNumberSizeSlider />
-                            </Box>
                         </Grid>
                         <Grid item xs={12} sx={{ justifyContent: 'flex-end'}}>
                             <Button type="submit" variant='contained'>Generate Images</Button>             

@@ -5,6 +5,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Grow,
     ImageListItem,
     ImageListItemBar,
     Stack,
@@ -21,29 +22,31 @@ export const ImageListItemWithHover = (props: ImageListItemWithHoverProps) => {
     const [displayPromot, setDisplayPrompt] = useState(false);
 
     return (
-        <ImageListItem
-            key={item.image}
-            onClick={() => onClick()}
-            sx={{
-                width: item.width || IMAGE_LIST_ITEM_PX,
-                height: item.height || IMAGE_LIST_ITEM_PX,
-                objectFit: 'cover',
-                aspectRatio: '1/1',
-                borderRadius: 1,
-                '> img':{
-                    borderRadius: 1
-                }
+        <Grow in={true} style={{ transformOrigin: '0 0 0' }} timeout={1000}>
+            <ImageListItem
+                key={item.image}
+                onClick={() => onClick()}
+                sx={{
+                    width: item.width || IMAGE_LIST_ITEM_PX,
+                    height: item.height || IMAGE_LIST_ITEM_PX,
+                    objectFit: 'cover',
+                    aspectRatio: '1/1',
+                    borderRadius: 1,
+                    '> img':{
+                        borderRadius: 1
+                    }
 
-            }}
-        >
-            <img src={item.image}
-                alt={item.seed}
-                loading="lazy"
-                onMouseEnter={()=> setDisplayPrompt(true)}
-                onMouseLeave={()=> setDisplayPrompt(false)}
-                />
-            { displayPromot && <ImageListItemBar title={prompt}/> }
-        </ImageListItem>
+                }}
+            >
+                <img src={item.image}
+                    alt={item.seed}
+                    loading="lazy"
+                    onMouseEnter={()=> setDisplayPrompt(true)}
+                    onMouseLeave={()=> setDisplayPrompt(false)}
+                    />
+                { displayPromot && <ImageListItemBar title={prompt}/> }
+            </ImageListItem>
+        </Grow>
     )
 }
 
@@ -62,8 +65,8 @@ export const AccordionImage = (props: GeneratedImageProps): JSX.Element => {
                 close={() => setIndex(-1)}
                 plugins={[Captions]}
             />
-            <Accordion defaultExpanded>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+            <Accordion defaultExpanded slotProps={{ transition: { unmountOnExit: true } }}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel-image" aria-controls="panel-content">
                     <Stack direction="row" gap={2}>
                         <Stack direction="row" alignItems="center" gap={0.5}>
                             <TextSnippetIcon />
